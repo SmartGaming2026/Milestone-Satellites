@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milestone Satellites - Guia Interativo</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --surface: #1a2128;
+    --surface-2: #232c35;
+    --border: #2d3742;
+    --text: #e8eaed;
+    --text-muted: #9aa4af;
+    --accent: #4a9eff;
+    --accent-soft: rgba(74, 158, 255, 0.12);
+    --green: #4ade80;
+    --green-soft: rgba(74, 222, 128, 0.12);
+    --red: #f87171;
+    --red-soft: rgba(248, 113, 113, 0.12);
+    --amber: #fbbf24;
+    --amber-soft: rgba(251, 191, 36, 0.12);
+    --purple: #a78bfa;
+    --purple-soft: rgba(167, 139, 250, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 1.25rem 0 0.6rem;
+    color: var(--text);
+  }
+
+  p {
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+  }
+
+  p strong { color: var(--text); font-weight: 600; }
+
+  .formula {
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    color: var(--text);
+  }
+
+  .key-insight {
+    background: var(--purple-soft);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+  }
+
+  .key-insight .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--purple);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .key-insight p { color: var(--text); margin: 0; }
+
+  /* Calculator */
+  .calculator {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 600px) {
+    .calc-grid { grid-template-columns: 1fr; }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+
+  input[type="number"] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: "SF Mono", Monaco, monospace;
+    font-weight: 600;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s ease;
+  }
+
+  input[type="number"]:focus {
+    border-color: var(--accent);
+  }
+
+  .value {
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  .results {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+
+  .result-row:last-child { border-bottom: none; }
+
+  .result-row .label { color: var(--text-muted); }
+  .result-row .val { font-family: "SF Mono", Monaco, monospace; color: var(--text); font-weight: 600; }
+
+  .equity-display {
+    text-align: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .equity-display.good { background: var(--green-soft); border: 1px solid rgba(74, 222, 128, 0.3); }
+  .equity-display.medium { background: var(--amber-soft); border: 1px solid rgba(251, 191, 36, 0.3); }
+  .equity-display.bad { background: var(--red-soft); border: 1px solid rgba(248, 113, 113, 0.3); }
+
+  .equity-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: "SF Mono", Monaco, monospace;
+  }
+
+  .equity-display.good .equity-value { color: var(--green); }
+  .equity-display.medium .equity-value { color: var(--amber); }
+  .equity-display.bad .equity-value { color: var(--red); }
+
+  .equity-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  /* Table */
+  .stack-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  .stack-table th, .stack-table td {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-table th {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stack-table td:last-child { text-align: right; font-family: "SF Mono", Monaco, monospace; }
+
+  .stack-table tr.highlight { background: var(--accent-soft); }
+  .stack-table tr.highlight td { color: var(--text); font-weight: 600; }
+
+  /* Comparison cards */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 600px) {
+    .comparison { grid-template-columns: 1fr; }
+  }
+
+  .comp-card {
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 1.25rem;
+    border-top: 3px solid;
+  }
+
+  .comp-card.short { border-color: var(--green); }
+  .comp-card.big { border-color: var(--red); }
+
+  .comp-card h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .comp-card.short h4 { color: var(--green); }
+  .comp-card.big h4 { color: var(--red); }
+
+  .comp-card p { font-size: 0.88rem; margin: 0; }
+
+  /* Scenarios */
+  .scenarios {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .scenario {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    background: var(--surface-2);
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .scenario .pos { font-weight: 600; }
+  .scenario .stack { color: var(--text-muted); font-family: "SF Mono", Monaco, monospace; font-size: 0.85rem; }
+  .scenario .equity {
+    font-family: "SF Mono", Monaco, monospace;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+
+  .equity.low { background: var(--green-soft); color: var(--green); }
+  .equity.mid { background: var(--amber-soft); color: var(--amber); }
+  .equity.high { background: var(--red-soft); color: var(--red); }
+
+  .takeaway {
+    background: linear-gradient(135deg, var(--accent-soft), var(--purple-soft));
+    border: 1px solid rgba(74, 158, 255, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .takeaway h3 { margin-top: 0; color: var(--accent); }
+  .takeaway p { color: var(--text); }
+
+  footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Milestone Satellites</h1>
+    <p class="subtitle">A matemática contraintuitiva dos satélites com stack alvo</p>
+  </header>
+
+  <section>
+    <h2><span class="num">1</span>O conceito base</h2>
+    <p>Num <strong>Milestone Satellite</strong>, ganhas o prémio (normalmente uma vaga para um torneio maior) assim que atinges uma <strong>stack alvo</strong>. Neste exemplo, o alvo é <strong>100.000 fichas</strong>.</p>
+    <p>O detalhe crucial: qualquer ficha acima das 100.000 <strong>não tem valor</strong>. Já ganhaste o prémio. As fichas extra são inúteis. É esta única regra que vira o ICM tradicional do avesso.</p>
+
+    <div class="key-insight">
+      <div class="label">Ideia chave</div>
+      <p>O teu lado positivo está limitado. O teu lado negativo continua igual. Isto muda completamente que mãos podes pagar.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>A fórmula</h2>
+    <p>Em pot odds normais, divides o custo de pagar pelo pote final total. Em Milestone Satellites, tens de excluir as fichas que te levam acima do alvo:</p>
+
+    <div class="formula">
+      Equity necessária = Custo de pagar ÷ (Custo de pagar + Ganho líquido − Fichas excedentes)
+    </div>
+
+    <p>As <strong>fichas excedentes</strong> são qualquer quantia que te levaria acima das 100.000. Não contam como ganho porque nunca as poderás usar.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>O cenário do exemplo</h2>
+    <p>UTG fez Max Late Reg e, na primeira mão, faz shove de 10.000 fichas (10BB). Blinds 500/1.000. Stack alvo: 100.000.</p>
+
+    <table class="stack-table">
+      <thead>
+        <tr><th>Posição</th><th>Stack</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>UTG (shove)</td><td>10.000</td></tr>
+        <tr><td>UTG+1</td><td>70.000</td></tr>
+        <tr><td>EP</td><td>80.000</td></tr>
+        <tr><td>MP</td><td>90.000</td></tr>
+        <tr><td>HJ</td><td>20.000</td></tr>
+        <tr><td>CO</td><td>30.000</td></tr>
+        <tr class="highlight"><td>BTN</td><td>98.000</td></tr>
+        <tr><td>SB</td><td>20.000</td></tr>
+        <tr><td>BB</td><td>40.000</td></tr>
+      </tbody>
+    </table>
+
+    <p>Vamos ver quanto equity cada jogador precisa para pagar este shove de 10.000 se todos os outros foldassem.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>Equity necessária por posição</h2>
+    <p>O mesmo shove. Stacks diferentes. Decisões radicalmente diferentes:</p>
+
+    <div class="scenarios">
+      <div class="scenario">
+        <span class="pos">HJ paga</span>
+        <span class="stack">20.000 → 42.500</span>
+        <span class="equity low">47%</span>
+      </div>
+      <div class="scenario">
+        <span class="pos">UTG+1 paga</span>
+        <span class="stack">70.000 → 82.500</span>
+        <span class="equity mid">44,4%</span>
+      </div>
+      <div class="scenario">
+        <span class="pos">EP paga</span>
+        <span class="stack">80.000 → topo a 100k</span>
+        <span class="equity mid">77,8%</span>
+      </div>
+      <div class="scenario">
+        <span class="pos">MP paga</span>
+        <span class="stack">90.000 → topo a 100k</span>
+        <span class="equity high">87,5%</span>
+      </div>
+      <div class="scenario">
+        <span class="pos">BTN paga</span>
+        <span class="stack">98.000 → topo a 100k</span>
+        <span class="equity high">97%</span>
+      </div>
+    </div>
+
+    <div class="key-insight">
+      <div class="label">A inversão crítica</div>
+      <p>O BTN tem a maior stack da mesa, mas precisa de <strong>97% de equity</strong> para pagar. Nem AA tem 97% contra uma mão aleatória. <strong>Foldas Ases.</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>Calculadora interativa</h2>
+    <p>Insere os valores da mão para ver a equity necessária:</p>
+
+    <div class="calculator">
+      <div class="calc-grid">
+        <div class="input-group">
+          <label>Stack alvo</label>
+          <input type="number" id="target" value="100000" step="1000" min="0">
+        </div>
+        <div class="input-group">
+          <label>A tua stack (antes da mão)</label>
+          <input type="number" id="myStack" value="98000" step="1000" min="0">
+        </div>
+        <div class="input-group">
+          <label>All-in stack (do oponente)</label>
+          <input type="number" id="allIn" value="10000" step="500" min="0">
+        </div>
+        <div class="input-group">
+          <label>Pote sem o shove (blinds + antes)</label>
+          <input type="number" id="deadMoney" value="1500" step="100" min="0">
+        </div>
+      </div>
+
+      <div class="results">
+        <div class="result-row">
+          <span class="label">Valor do All In</span>
+          <span class="val" id="costReal">10.000</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Stack se ganhares (bruta)</span>
+          <span class="val" id="winRaw">109.500</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Stack se ganhares (limitada ao alvo)</span>
+          <span class="val" id="winCapped">100.000</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Ganho útil</span>
+          <span class="val" id="usefulWin">2.000</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Stack se perderes</span>
+          <span class="val" id="loseStack">88.000</span>
+        </div>
+      </div>
+
+      <div class="equity-display" id="equityBox">
+        <div class="equity-value" id="equityPct">83,3%</div>
+        <div class="equity-label">Equity necessária para pagar</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span>Short Stack vs Big Stack</h2>
+    <p>O ICM tradicional é virado do avesso. Em satélites normais, o Big Stack pressiona as curtas. Aqui, é o contrário:</p>
+
+    <div class="comparison">
+      <div class="comp-card short">
+        <h4>Short Stack</h4>
+        <p><strong>Sem pressão ICM.</strong> Está longe do alvo, não tem nada a perder. Pode pagar com range mais wide — quase puro ChipEV.</p>
+      </div>
+      <div class="comp-card big">
+        <h4>Big Stack (perto do alvo)</h4>
+        <p><strong>Pressão ICM enorme.</strong> Upside limitado, downside enorme. Tem de foldar mãos que pagaria sem pensar em qualquer outro formato.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="takeaway">
+    <h3>O grande takeaway</h3>
+    <p>A maioria dos jogadores assume que uma stack grande pode arriscar fichas para chegar ao alvo eliminando as stacks curtas. <strong>O oposto é que é a verdade.</strong> Quando estás short não tens pressão de ICM nenhuma. Quando estás perto da stack alvo, há uma pressão de ICM massiva sobre ti porque o teu upside está limitado. É o erro estratégico mais caro neste formato.</p>
+  </div>
+
+  <footer>
+    <p>Baseado nos princípios de ICM para Milestone Satellites</p>
+  </footer>
+
+</div>
+
+<script>
+  const target = document.getElementById('target');
+  const myStack = document.getElementById('myStack');
+  const allIn = document.getElementById('allIn');
+  const deadMoney = document.getElementById('deadMoney');
+
+  const costReal = document.getElementById('costReal');
+  const winRaw = document.getElementById('winRaw');
+  const winCapped = document.getElementById('winCapped');
+  const usefulWin = document.getElementById('usefulWin');
+  const loseStack = document.getElementById('loseStack');
+  const equityPct = document.getElementById('equityPct');
+  const equityBox = document.getElementById('equityBox');
+
+  function fmt(n) {
+    return Math.round(n).toLocaleString('pt-PT');
+  }
+
+  function update() {
+    const T = parseFloat(target.value) || 0;
+    const my = parseFloat(myStack.value) || 0;
+    const ai = parseFloat(allIn.value) || 0;
+    const dead = parseFloat(deadMoney.value) || 0;
+
+    // Custo real = mínimo entre o all-in do oponente e a tua stack
+    const c = Math.min(ai, my);
+
+    // Stack se ganhares = a tua stack + custo recuperado do oponente + dead money
+    const wonRaw = my + c + dead;
+    const wonCapped = Math.min(wonRaw, T);
+    const useful = wonCapped - my;
+    const afterLose = my - c;
+
+    costReal.textContent = fmt(c);
+    winRaw.textContent = fmt(wonRaw);
+
+    if (wonRaw > T) {
+      winCapped.textContent = fmt(wonCapped) + ' (limitada)';
+    } else {
+      winCapped.textContent = fmt(wonCapped);
+    }
+
+    usefulWin.textContent = fmt(useful);
+    loseStack.textContent = fmt(afterLose);
+
+    let equity;
+    if (useful <= 0) {
+      equity = 100;
+    } else if (c <= 0) {
+      equity = 0;
+    } else {
+      equity = (c / (c + useful)) * 100;
+    }
+
+    equityPct.textContent = equity.toFixed(1).replace('.', ',') + '%';
+
+    equityBox.classList.remove('good', 'medium', 'bad');
+    if (equity < 55) equityBox.classList.add('good');
+    else if (equity < 80) equityBox.classList.add('medium');
+    else equityBox.classList.add('bad');
+  }
+
+  [target, myStack, allIn, deadMoney].forEach(el => {
+    el.addEventListener('input', update);
+  });
+  update();
+</script>
+
+</body>
+</html>
